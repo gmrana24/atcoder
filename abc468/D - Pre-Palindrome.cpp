@@ -12,48 +12,33 @@
 
 using namespace std;
 
-int palindrome(string &s, int i, int j) {
-  int ct = 0;
-  while (i <= j) {
-    if (s[i] != s[j]) {
-      if (ct == 1)
-        return 1000;
-      ct++;
-    }
-    i++;
-    j--;
-  }
-  return ct;
-}
-
 void solve() {
   string s;
   getString(s);
   int n = s.length(), ans = 0;
-  vector<vector<int>> grid(n, vector<int>(n, 1000));
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < n - i; j++) {
-      if (i == 0)
-        grid[i][j] = 0;
-      else {
-        if (i < 2)
-          grid[i][j] = palindrome(s, j, j + i);
-        else {
-          if (grid[i - 2][j + 1] == 0) {
-            grid[i][j] = 0;
-            if (s[i + j] != s[j])
-              grid[i][j] += 1;
-          } else if (grid[i - 2][j + 1] == 1) {
-            if (s[j] == s[j + i])
-              grid[i][j] = 1;
-            else
-              grid[i][j] = 1000;
-          } else
-            grid[i][j] = palindrome(s, j, j + i);
-        }
-      }
-      if (grid[i][j] != 1000)
-        ans++;
+  vector<vector<int>> grid(n, vector<int>(n));
+  rep(i, 0, n) {
+    int l = i, r = i, c = 0;
+    while (l >= 0 && r < n) {
+      if (s[l] != s[r])
+        c++;
+      if (c == 2)
+        break;
+      ans++;
+      l--;
+      r++;
+    }
+    l = i;
+    r = i + 1;
+    c = 0;
+    while (l >= 0 && r < n) {
+      if (s[l] != s[r])
+        c++;
+      if (c == 2)
+        break;
+      ans++;
+      l--;
+      r++;
     }
   }
   cout << ans << endl;
