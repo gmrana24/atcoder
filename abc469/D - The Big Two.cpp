@@ -9,50 +9,41 @@
 #define mp make_pair
 #define F first
 #define S second
+#define mnx(a, b) min(a, b), max(a, b)
 
 using namespace std;
 
 void solve() {
-  int n, m, ans = 0;
+  int n, m;
   cin >> n >> m;
-  vector<pair<int, int>> arr(m);
-  map<int, set<int>> map;
-  rep(i, 0, m) {
-    int a, b;
-    cin >> a >> b;
-    arr[i] = mp(a, b);
-    map[a].insert(i);
-    map[b].insert(i);
-  }
-  rep(i, 1, n + 1) {
-    auto seen = map[i];
-    int x = -1, y = -1;
-    bool fx = true, fy = true;
-    rep(j, 0, m) {
-      if (seen.count(j))
-        continue;
-      auto cur = arr[j];
-      if (x == -1)
-        x = cur.F;
-      else {
-        if (x != cur.F && x != cur.S)
-          fx = false;
+  vector<int> a(m), b(m);
+  set<pair<int, int>> ans;
+  rep(i, 0, m) { cin >> a[i] >> b[i]; }
+  rep(i, 0, 2) {
+    int x = a[0], idx = 0;
+    while (idx < m && (a[idx] == x || b[idx] == x))
+      idx++;
+    if (idx != m) {
+      rep(j, 0, 2) {
+        int y = a[idx], c = idx;
+        while (c < m) {
+          if (y != a[c] && y != b[c] && x != a[c] && x != b[c])
+            break;
+          c++;
+        }
+        if (c == m)
+          ans.insert(mp(mnx(x, y)));
+        swap(a[idx], b[idx]);
       }
-      if (y == -1)
-        y = cur.S;
-      else {
-        if (y != cur.F && y != cur.S)
-          fy = false;
+    } else {
+      rep(j, 1, n + 1) {
+        if (j != x)
+          ans.insert(mp(mnx(j, x)));
       }
-      if (!fx && !fy)
-        break;
     }
-    if (fx)
-      ans++;
-    if (fy)
-      ans++;
+    swap(a[0], b[0]);
   }
-  cout << ans / 2 << endl;
+  cout << ans.size() << endl;
 }
 
 int main() {
