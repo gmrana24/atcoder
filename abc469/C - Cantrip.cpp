@@ -18,20 +18,20 @@ void solve() {
   string s;
   getString(s);
   vector<int> arr(n);
-  for (int i = 0; i < n; i++) {
+  arr[0] = s[0] == 'o';
+  rep(i, 1, n) {
     if (s[i] == 'o')
       arr[i] += 1;
-    if (i > 0)
-      arr[i] += arr[i - 1];
+    arr[i] += arr[i - 1];
   }
-  for (int i = 0; i < n; i++) {
+  rep(i, 0, n) {
     int l = arr[i] + i, p = i;
     while (l < n && arr[p] != arr[l]) {
       int t = l;
       l += arr[l] - arr[p];
       p = t;
     }
-    cout << min(l + 1, n) << endl;
+    cout << min(l + 1, n) << '\n';
   }
 }
 
